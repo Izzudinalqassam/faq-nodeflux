@@ -122,3 +122,9 @@ mark {
   border-radius: 0.2em;
   font-weight: 500;
 }
+
+/* Import mobile-specific styles */
+@import './styles/mobile.css';
+
+/* Import print-specific styles */
+@import './styles/print.css';

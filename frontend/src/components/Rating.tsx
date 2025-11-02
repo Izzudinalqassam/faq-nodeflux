@@ -39,28 +39,33 @@ const Rating: React.FC<RatingProps> = ({
   const renderStar = (starNumber: number) => {
     const filled = starNumber <= (hoveredRating || rating);
     const interactiveClasses = interactive && !loading
-      ? 'cursor-pointer transition-colors hover:text-yellow-400'
+      ? 'cursor-pointer transition-colors hover:text-yellow-400 mobile-star-hover'
       : '';
 
     return (
-      <Star
+      <button
         key={starNumber}
-        className={`${sizeClasses[size]} ${
-          filled
-            ? 'text-yellow-400 fill-yellow-400'
-            : 'text-gray-300'
-        } ${interactiveClasses}`}
         onClick={() => handleStarClick(starNumber)}
         onMouseEnter={() => interactive && setHoveredRating(starNumber)}
         onMouseLeave={() => interactive && setHoveredRating(0)}
-      />
+        className={`${interactive ? 'mobile-touch-target' : ''} ${interactive ? 'mobile-touch-feedback' : ''}`}
+        disabled={!interactive || loading}
+      >
+        <Star
+          className={`${sizeClasses[size]} star ${
+            filled
+              ? 'text-yellow-400 fill-yellow-400'
+              : 'text-gray-300'
+          } ${interactiveClasses}`}
+        />
+      </button>
     );
   };
 
   return (
-    <div className={`flex items-center space-x-2 ${className}`}>
+    <div className={`flex items-center space-x-2 ${className} ${interactive ? 'mobile-rating' : ''}`}>
       {loading ? (
-        <Loader2 className={`${sizeClasses[size]} animate-spin text-blue-600`} />
+        <Loader2 className={`${sizeClasses[size]} animate-spin text-blue-600 mobile-spinner`} />
       ) : (
         <div className="flex items-center">
           {[1, 2, 3, 4, 5].map(renderStar)}
@@ -68,13 +73,13 @@ const Rating: React.FC<RatingProps> = ({
       )}
 
       {showCount && !loading && (
-        <span className="text-sm text-gray-600">
+        <span className="text-sm text-gray-600 mobile-body">
           {rating.toFixed(1)} ({totalRatings})
         </span>
       )}
 
       {interactive && !loading && (
-        <span className="text-xs text-gray-500 ml-2">
+        <span className="text-xs text-gray-500 ml-2 hidden md:inline mobile-small">
           Click to rate
         </span>
       )}

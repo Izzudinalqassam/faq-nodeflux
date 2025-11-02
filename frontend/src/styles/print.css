@@ -1,0 +1,339 @@
+/* Print-specific styles for FAQ content */
+
+@media print {
+  /* Hide non-print elements */
+  .no-print,
+  .mobile-no-print,
+  button:not(.print-button),
+  input:not(.print-button),
+  textarea,
+  select,
+  .bg-blue-600,
+  .feedback-section,
+  .rating-section,
+  .search-section,
+  .navigation-section,
+  header:not(.print-header),
+  footer {
+    display: none !important;
+  }
+
+  /* Print-specific container */
+  .print-container {
+    max-width: 100%;
+    margin: 0;
+    padding: 1rem;
+  }
+
+  /* Print header */
+  .print-header {
+    background: white !important;
+    color: black !important;
+    border-bottom: 2px solid #333;
+    padding: 1rem 0;
+    margin-bottom: 2rem;
+  }
+
+  .print-header h1 {
+    color: black !important;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .print-header .subtitle {
+    color: #666 !important;
+    font-size: 0.875rem;
+  }
+
+  /* FAQ content */
+  .print-content {
+    font-family: 'Georgia', serif;
+    line-height: 1.6;
+    color: black;
+  }
+
+  .print-content h2 {
+    color: #333;
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 0.5rem;
+  }
+
+  .print-content h3 {
+    color: #444;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .print-content p {
+    margin-bottom: 1rem;
+    text-align: justify;
+  }
+
+  .print-content ul,
+  .print-content ol {
+    margin-bottom: 1rem;
+    margin-left: 2rem;
+  }
+
+  .print-content li {
+    margin-bottom: 0.5rem;
+  }
+
+  .print-content code {
+    background: #f5f5f5;
+    padding: 0.125rem 0.25rem;
+    border: 1px solid #ddd;
+    border-radius: 0.25rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.875rem;
+  }
+
+  .print-content pre {
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin: 1rem 0;
+    overflow: hidden;
+    page-break-inside: avoid;
+  }
+
+  .print-content pre code {
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+
+  .print-content blockquote {
+    border-left: 4px solid #333;
+    padding-left: 1rem;
+    margin: 1rem 0;
+    font-style: italic;
+    color: #555;
+  }
+
+  .print-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+  }
+
+  .print-content th,
+  .print-content td {
+    border: 1px solid #ddd;
+    padding: 0.5rem;
+    text-align: left;
+  }
+
+  .print-content th {
+    background: #f5f5f5;
+    font-weight: bold;
+  }
+
+  /* Print attachments */
+  .print-attachments {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #ddd;
+  }
+
+  .print-attachments h3 {
+    color: #333;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+
+  .print-attachment {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+  }
+
+  .print-attachment:last-child {
+    border-bottom: none;
+  }
+
+  .print-attachment-name {
+    font-weight: bold;
+    color: #333;
+  }
+
+  .print-attachment-meta {
+    font-size: 0.875rem;
+    color: #666;
+  }
+
+  /* Print tags */
+  .print-tags {
+    margin-top: 1rem;
+  }
+
+  .print-tag {
+    display: inline-block;
+    background: #f0f0f0;
+    color: #333;
+    padding: 0.25rem 0.5rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Print footer */
+  .print-footer {
+    margin-top: 3rem;
+    padding-top: 1rem;
+    border-top: 1px solid #ddd;
+    font-size: 0.875rem;
+    color: #666;
+    text-align: center;
+  }
+
+  .print-footer .url {
+    font-family: 'Courier New', monospace;
+    color: #333;
+  }
+
+  /* Print page breaks */
+  .print-page-break {
+    page-break-before: always;
+  }
+
+  .print-avoid-break {
+    page-break-inside: avoid;
+  }
+
+  /* Print image styles */
+  .print-content img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 1rem 0;
+  }
+
+  /* Print links */
+  .print-content a {
+    color: #0066cc;
+    text-decoration: underline;
+  }
+
+  .print-content a::after {
+    content: " (" attr(href) ")";
+    font-size: 0.875rem;
+    color: #666;
+  }
+
+  .print-content a[href^="#"]::after {
+    content: "";
+  }
+
+  /* Print source information */
+  .print-source {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 0.75rem;
+    color: #999;
+    background: white;
+    padding: 0.5rem;
+    border-top: 1px solid #ddd;
+  }
+
+  /* Print date */
+  .print-date {
+    font-size: 0.875rem;
+    color: #666;
+    margin-bottom: 1rem;
+  }
+
+  /* Category styling */
+  .print-category {
+    background: #f8f9fa;
+    color: #495057;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    display: inline-block;
+    margin-bottom: 1rem;
+  }
+
+  /* Related FAQs */
+  .print-related {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 2px solid #333;
+  }
+
+  .print-related h2 {
+    color: #333;
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .print-related-item {
+    margin-bottom: 0.75rem;
+    padding: 0.5rem;
+    border-left: 3px solid #ddd;
+    padding-left: 1rem;
+  }
+
+  .print-related-title {
+    font-weight: bold;
+    color: #333;
+  }
+
+  .print-related-category {
+    font-size: 0.875rem;
+    color: #666;
+  }
+
+  /* Hide scrollbars */
+  * {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  *::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Ensure proper text rendering */
+  body {
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Force background colors and images */
+  .print-force-bg {
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+/* Print preview styles */
+@media screen {
+  .print-preview {
+    background: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin: 20px auto;
+    max-width: 800px;
+    padding: 20px;
+  }
+
+  .print-preview .print-header {
+    background: linear-gradient(to right, #2563eb, #1e40af);
+    color: white;
+    padding: 20px;
+    border-radius: 8px 8px 0 0;
+  }
+}

@@ -63,11 +63,11 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images, title = "Gallery" }
   return (
     <div className="space-y-4">
       {/* Gallery Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 md:gap-4 mobile-gallery">
         {images.map((image, index) => (
-          <div
+          <button
             key={image.id}
-            className="group relative aspect-square rounded-lg overflow-hidden border border-gray-200 cursor-pointer hover:shadow-lg transition-all duration-200"
+            className="group relative aspect-square rounded-lg overflow-hidden border border-gray-200 cursor-pointer hover:shadow-lg transition-all duration-200 mobile-gallery-item mobile-touch-target mobile-touch-feedback"
             onClick={() => handleImageClick(index)}
           >
             <div
@@ -77,7 +77,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images, title = "Gallery" }
             <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200" />
             <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
               <div className="bg-white rounded-lg p-2">
-                <ZoomIn className="h-5 w-5 text-gray-700" />
+                <ZoomIn className="h-4 w-4 md:h-5 md:w-5 text-gray-700" />
               </div>
             </div>
             {totalImages > 1 && (
@@ -85,7 +85,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images, title = "Gallery" }
                 {index + 1} / {totalImages}
               </div>
             )}
-          </div>
+          </button>
         ))}
       </div>
 
@@ -109,15 +109,15 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images, title = "Gallery" }
 
       {/* Lightbox Modal */}
       {isLightboxOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90 p-4">
-          <div className="relative max-w-6xl max-h-full w-full">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90 p-2 md:p-4 mobile-lightbox mobile-scroll-container">
+          <div className="relative max-w-6xl max-h-full w-full mobile-lightbox-content">
             {/* Close Button */}
             <button
               onClick={() => setIsLightboxOpen(false)}
-              className="absolute top-4 right-4 z-10 bg-white bg-opacity-10 hover:bg-opacity-20 text-white rounded-full p-2 transition-colors"
+              className="absolute top-2 right-2 md:top-4 md:right-4 z-10 bg-white bg-opacity-10 hover:bg-opacity-20 text-white rounded-full p-2 transition-colors mobile-btn-icon"
               title="Close gallery"
             >
-              <X className="h-6 w-6" />
+              <X className="h-5 w-5 md:h-6 md:w-6" />
             </button>
 
             {/* Navigation Buttons */}
@@ -125,17 +125,17 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images, title = "Gallery" }
               <>
                 <button
                   onClick={handlePrevious}
-                  className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-10 hover:bg-opacity-20 text-white rounded-full p-2 transition-colors"
+                  className="absolute left-2 md:left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-10 hover:bg-opacity-20 text-white rounded-full p-2 transition-colors mobile-btn-icon"
                   title="Previous image"
                 >
-                  <ChevronLeft className="h-6 w-6" />
+                  <ChevronLeft className="h-5 w-5 md:h-6 md:w-6" />
                 </button>
                 <button
                   onClick={handleNext}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-10 hover:bg-opacity-20 text-white rounded-full p-2 transition-colors"
+                  className="absolute right-2 md:right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-10 hover:bg-opacity-20 text-white rounded-full p-2 transition-colors mobile-btn-icon"
                   title="Next image"
                 >
-                  <ChevronRight className="h-6 w-6" />
+                  <ChevronRight className="h-5 w-5 md:h-6 md:w-6" />
                 </button>
               </>
             )}
@@ -143,18 +143,18 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images, title = "Gallery" }
             {/* Image Container */}
             <div className="bg-white rounded-lg overflow-hidden">
               {/* Header */}
-              <div className="bg-gray-100 px-4 py-3 border-b border-gray-200">
+              <div className="bg-gray-100 px-3 md:px-4 py-2 md:py-3 border-b border-gray-200">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-medium text-gray-900 truncate">
+                  <h3 className="text-sm font-medium text-gray-900 truncate mobile-body">
                     {title}
                   </h3>
                   <div className="flex items-center space-x-2">
-                    <span className="text-xs text-gray-500">
+                    <span className="text-xs text-gray-500 mobile-small">
                       {currentImageIndex + 1} of {totalImages}
                     </span>
                     <button
                       onClick={() => handleDownload(currentImage)}
-                      className="text-gray-500 hover:text-gray-700 transition-colors"
+                      className="text-gray-500 hover:text-gray-700 transition-colors mobile-btn-icon"
                       title="Download image"
                     >
                       <Download className="h-4 w-4" />
@@ -164,7 +164,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images, title = "Gallery" }
               </div>
 
               {/* Image */}
-              <div className="flex items-center justify-center bg-gray-50 p-4" style={{ minHeight: '400px' }}>
+              <div className="flex items-center justify-center bg-gray-50 p-2 md:p-4" style={{ minHeight: '200px', maxHeight: '70vh' }}>
                 <img
                   src={currentImage.url}
                   alt={currentImage.original_filename}
@@ -173,12 +173,12 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images, title = "Gallery" }
               </div>
 
               {/* Footer */}
-              <div className="bg-gray-100 px-4 py-3 border-t border-gray-200">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm text-gray-700 truncate">
+              <div className="bg-gray-100 px-3 md:px-4 py-2 md:py-3 border-t border-gray-200">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+                  <p className="text-sm text-gray-700 truncate mobile-body">
                     {currentImage.original_filename}
                   </p>
-                  <span className="text-xs text-gray-500">
+                  <span className="text-xs text-gray-500 mobile-small md:mt-0">
                     {formatFileSize(currentImage.file_size)}
                   </span>
                 </div>

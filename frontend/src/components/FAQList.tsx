@@ -96,23 +96,23 @@ const FAQList: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 mobile-no-overflow">
       {/* Header */}
-      <header className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
-        <div className="max-w-6xl mx-auto px-4 py-16 text-center">
-          <h1 className="text-4xl font-bold mb-4">
+      <header className="bg-gradient-to-r from-blue-600 to-blue-800 text-white mobile-safe-top">
+        <div className="max-w-6xl mx-auto px-4 py-8 md:py-16 text-center">
+          <h1 className="text-2xl md:text-4xl font-bold mb-4 mobile-h1">
             <i className="fas fa-brain mr-3"></i>
             Nodeflux FAQ Center
           </h1>
-          <p className="text-xl opacity-90">
+          <p className="text-base md:text-xl opacity-90 mobile-body">
             Pusat Bantuan & Troubleshooting Produk VisionAI
           </p>
         </div>
       </header>
 
       {/* Search Section */}
-      <section className="bg-white border-b">
-        <div className="max-w-3xl mx-auto px-4 py-8">
+      <section className="bg-white border-b mobile-search">
+        <div className="max-w-3xl mx-auto px-4 py-4 md:py-8">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
             <input
@@ -120,11 +120,11 @@ const FAQList: React.FC = () => {
               placeholder="Cari masalah atau solusi..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent mobile-input mobile-touch-target"
             />
             {searchTerm && (
               <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded mobile-small">
                   {faqs.length} hasil
                 </span>
               </div>
@@ -134,10 +134,10 @@ const FAQList: React.FC = () => {
           {/* Search Results Summary */}
           {searchTerm && (
             <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-              <p className="text-sm text-blue-800">
+              <p className="text-sm text-blue-800 mobile-body">
                 Menampilkan {faqs.length} hasil untuk pencarian "<strong>{searchTerm}</strong>"
                 {faqs.length === 0 && (
-                  <span className="block mt-1">Coba kata kunci lain atau pilih kategori yang berbeda</span>
+                  <span className="block mt-1 mobile-small">Coba kata kunci lain atau pilih kategori yang berbeda</span>
                 )}
               </p>
             </div>
@@ -148,34 +148,34 @@ const FAQList: React.FC = () => {
       {/* Categories */}
       <section className="bg-white py-8">
         <div className="max-w-6xl mx-auto px-4">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Kategori Bantuan</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6 mobile-h2">Kategori Bantuan</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mobile-category-grid">
             <button
               onClick={() => setSelectedCategory('all')}
-              className={`p-4 rounded-lg border-2 transition-all ${
+              className={`p-4 rounded-lg border-2 transition-all mobile-touch-target mobile-category-card ${
                 selectedCategory === 'all'
                   ? 'border-blue-500 bg-blue-50'
                   : 'border-gray-200 hover:border-gray-300'
               }`}
             >
-              <i className="fas fa-th-large text-2xl mb-2 text-blue-600"></i>
-              <div className="font-semibold">Semua Kategori</div>
-              <div className="text-sm text-gray-600 mt-1">{faqs.length} FAQ</div>
+              <i className="fas fa-th-large text-xl md:text-2xl mb-2 text-blue-600"></i>
+              <div className="font-semibold text-sm md:text-base">Semua Kategori</div>
+              <div className="text-sm text-gray-600 mt-1 mobile-small">{faqs.length} FAQ</div>
             </button>
 
             {categories.map((category) => (
               <button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.name)}
-                className={`p-4 rounded-lg border-2 transition-all ${
+                className={`p-4 rounded-lg border-2 transition-all mobile-touch-target mobile-category-card ${
                   selectedCategory === category.name
                     ? 'border-blue-500 bg-blue-50'
                     : 'border-gray-200 hover:border-gray-300'
                 }`}
               >
-                <i className={`${category.icon} text-2xl mb-2`} style={{ color: category.color }}></i>
-                <div className="font-semibold capitalize">{category.name}</div>
-                <div className="text-sm text-gray-600 mt-1">{category.description}</div>
+                <i className={`${category.icon} text-xl md:text-2xl mb-2`} style={{ color: category.color }}></i>
+                <div className="font-semibold capitalize text-sm md:text-base">{category.name}</div>
+                <div className="text-sm text-gray-600 mt-1 mobile-small">{category.description}</div>
               </button>
             ))}
           </div>
@@ -185,19 +185,19 @@ const FAQList: React.FC = () => {
       {/* FAQ List */}
       <section className="py-12">
         <div className="max-w-4xl mx-auto px-4">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8">
+          <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6 md:mb-8 mobile-h2">
             {searchTerm ? `Hasil Pencarian (${faqs.length})` : `Pertanyaan Umum (${faqs.length})`}
           </h2>
 
           {faqs.length === 0 ? (
-            <div className="text-center py-12">
-              <div className="text-gray-400 text-6xl mb-4">
+            <div className="text-center py-12 mobile-loading">
+              <div className="text-gray-400 text-4xl md:text-6xl mb-4">
                 <i className="fas fa-search"></i>
               </div>
-              <h3 className="text-xl font-semibold text-gray-600 mb-2">
+              <h3 className="text-lg md:text-xl font-semibold text-gray-600 mb-2 mobile-h3">
                 {searchTerm ? 'Tidak ada hasil ditemukan' : 'Belum ada FAQ'}
               </h3>
-              <p className="text-gray-500">
+              <p className="text-gray-500 mobile-body">
                 {searchTerm
                   ? 'Coba kata kunci lain atau pilih kategori yang berbeda'
                   : 'FAQ akan segera tersedia'
@@ -205,30 +205,30 @@ const FAQList: React.FC = () => {
               </p>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3 md:space-y-4">
               {faqs.map((faq) => (
-                <div key={faq.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                <div key={faq.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden mobile-faq-item">
                   {/* FAQ Header with Highlighted Question */}
                   <button
                     onClick={() => toggleExpanded(faq.id)}
-                    className="w-full px-6 py-4 text-left hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset"
+                    className="w-full px-4 md:px-6 py-3 md:py-4 text-left hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset mobile-faq-question mobile-touch-target mobile-touch-feedback"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3 flex-1 min-w-0">
                         <i
-                          className={`${getCategoryIcon(faq.category)} text-lg flex-shrink-0`}
+                          className={`${getCategoryIcon(faq.category)} text-base md:text-lg flex-shrink-0`}
                           style={{ color: getCategoryColor(faq.category) }}
                         ></i>
                         <div className="flex-1 min-w-0 text-left">
                           <HighlightedText
                             text={faq.question}
                             searchTerm={searchTerm}
-                            className="font-semibold text-gray-900"
+                            className="font-semibold text-gray-900 text-sm md:text-base"
                           />
 
                           {/* Search Snippet */}
                           {searchTerm && !expandedItems.has(faq.id) && (
-                            <p className="text-sm text-gray-600 mt-1">
+                            <p className="text-sm text-gray-600 mt-1 mobile-small">
                               <HighlightedText
                                 text={getSearchSnippet(stripHtml(faq.answer), searchTerm, 120)}
                                 searchTerm={searchTerm}
@@ -240,7 +240,7 @@ const FAQList: React.FC = () => {
                       </div>
                       <div className="flex items-center space-x-2 flex-shrink-0">
                         {faq.tags.length > 0 && (
-                          <div className="flex items-center space-x-1 mr-2">
+                          <div className="hidden md:flex items-center space-x-1 mr-2">
                             <Tag className="h-4 w-4 text-gray-400" />
                             <span className="text-sm text-gray-500">
                               {faq.tags.slice(0, 2).join(', ')}
@@ -248,18 +248,20 @@ const FAQList: React.FC = () => {
                             </span>
                           </div>
                         )}
-                        {expandedItems.has(faq.id) ? (
-                          <ChevronUp className="h-5 w-5 text-gray-400" />
-                        ) : (
-                          <ChevronDown className="h-5 w-5 text-gray-400" />
-                        )}
+                        <div className="mobile-btn-icon">
+                          {expandedItems.has(faq.id) ? (
+                            <ChevronUp className="h-5 w-5 text-gray-400" />
+                          ) : (
+                            <ChevronDown className="h-5 w-5 text-gray-400" />
+                          )}
+                        </div>
                       </div>
                     </div>
                   </button>
 
                   {/* Expanded Content */}
                   {expandedItems.has(faq.id) && (
-                    <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
+                    <div className="px-4 md:px-6 py-3 md:py-4 bg-gray-50 border-t border-gray-200 mobile-faq-answer">
                       <div className="prose prose-sm max-w-none">
                         <ReactMarkdown
                           remarkPlugins={[remarkGfm]}
@@ -273,16 +275,16 @@ const FAQList: React.FC = () => {
                       {faq.attachments && faq.attachments.length > 0 && (
                         <div className="mt-4 flex items-center text-sm text-gray-600">
                           <BookOpen className="h-4 w-4 mr-2" />
-                          <span>{faq.attachments.length} attachment{faq.attachments.length > 1 ? 's' : ''}</span>
+                          <span className="mobile-body">{faq.attachments.length} attachment{faq.attachments.length > 1 ? 's' : ''}</span>
                         </div>
                       )}
 
                       {faq.tags.length > 0 && (
-                        <div className="mt-4 flex flex-wrap gap-2">
+                        <div className="mt-4 flex flex-wrap gap-2 mobile-tags">
                           {faq.tags.map((tag, index) => (
                             <span
                               key={index}
-                              className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                              className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mobile-tag"
                             >
                               #{tag}
                             </span>

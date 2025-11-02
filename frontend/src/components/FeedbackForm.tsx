@@ -62,49 +62,49 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ faqId, onFeedbackSubmitted 
   }
 
   return (
-    <div className="bg-gray-50 rounded-lg border border-gray-200 p-6">
+    <div className="bg-gray-50 rounded-lg border border-gray-200 p-4 md:p-6 mobile-feedback-form">
       <div className="flex items-center mb-4">
         <MessageSquare className="h-5 w-5 text-gray-600 mr-2" />
-        <h3 className="text-lg font-medium text-gray-900">Was this helpful?</h3>
+        <h3 className="text-lg font-medium text-gray-900 mobile-h3">Was this helpful?</h3>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Feedback Type */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-700 mb-2 mobile-body">
             Your experience
           </label>
-          <div className="flex space-x-4">
+          <div className="flex space-x-2 md:space-x-4 mobile-feedback-buttons">
             <button
               type="button"
               onClick={() => setFeedbackType('helpful')}
-              className={`flex items-center px-4 py-2 rounded-lg border-2 transition-colors ${
+              className={`flex items-center px-3 py-2 md:px-4 rounded-lg border-2 transition-colors mobile-touch-target mobile-feedback-button ${
                 feedbackType === 'helpful'
                   ? 'border-green-500 bg-green-50 text-green-700'
                   : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'
               }`}
             >
               <ThumbsUp className="h-4 w-4 mr-2" />
-              Helpful
+              <span className="text-sm md:text-base">Helpful</span>
             </button>
             <button
               type="button"
               onClick={() => setFeedbackType('not-helpful')}
-              className={`flex items-center px-4 py-2 rounded-lg border-2 transition-colors ${
+              className={`flex items-center px-3 py-2 md:px-4 rounded-lg border-2 transition-colors mobile-touch-target mobile-feedback-button ${
                 feedbackType === 'not-helpful'
                   ? 'border-red-500 bg-red-50 text-red-700'
                   : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'
               }`}
             >
               <ThumbsDown className="h-4 w-4 mr-2" />
-              Not Helpful
+              <span className="text-sm md:text-base">Not Helpful</span>
             </button>
           </div>
         </div>
 
         {/* Feedback Text */}
         <div>
-          <label htmlFor="feedback" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="feedback" className="block text-sm font-medium text-gray-700 mb-2 mobile-body">
             Your feedback *
           </label>
           <textarea
@@ -112,7 +112,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ faqId, onFeedbackSubmitted 
             value={feedbackText}
             onChange={(e) => setFeedbackText(e.target.value)}
             rows={4}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent mobile-textarea mobile-touch-target"
             placeholder={
               feedbackType === 'helpful'
                 ? 'What did you find helpful? How can we make it even better?'
@@ -124,7 +124,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ faqId, onFeedbackSubmitted 
 
         {/* Contact Email (Optional) */}
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2 mobile-body">
             Email (optional)
           </label>
           <input
@@ -132,10 +132,10 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ faqId, onFeedbackSubmitted 
             id="email"
             value={contactEmail}
             onChange={(e) => setContactEmail(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent mobile-input mobile-touch-target"
             placeholder="your@email.com"
           />
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-xs text-gray-500 mt-1 mobile-small">
             Only if you'd like us to follow up with you
           </p>
         </div>
@@ -143,7 +143,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ faqId, onFeedbackSubmitted 
         {/* Error Message */}
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-            <p className="text-sm text-red-600">{error}</p>
+            <p className="text-sm text-red-600 mobile-body">{error}</p>
           </div>
         )}
 
@@ -151,7 +151,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ faqId, onFeedbackSubmitted 
         <button
           type="submit"
           disabled={submitting}
-          className="w-full flex items-center justify-center px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="w-full flex items-center justify-center px-4 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors mobile-btn mobile-touch-target"
         >
           {submitting ? (
             <>
