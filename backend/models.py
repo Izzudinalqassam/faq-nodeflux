@@ -44,6 +44,17 @@ class FAQ(db.Model):
             'updated_at': self.updated_at.isoformat()
         }
 
+class Attachment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    filename = db.Column(db.String(255), nullable=False)
+    original_filename = db.Column(db.String(255), nullable=False)
+    file_path = db.Column(db.String(500), nullable=False)
+    file_size = db.Column(db.Integer)
+    mime_type = db.Column(db.String(100))
+    file_type = db.Column(db.String(20))  # 'image', 'document', 'other'
+    faq_id = db.Column(db.Integer, db.ForeignKey('faq.id'))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True, nullable=False)

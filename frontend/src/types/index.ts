@@ -65,4 +65,14 @@ export type FAQFormData = {
   category: string;
   tags: string[];
   order: number;
+  attachments?: FAQAttachment[];
+};
+
+export type FAQAttachment = {
+  id: number;
+  url: string;
+  filename: string;
+  original_filename: string;
+  file_type: string;
+  file_size: number;
 };

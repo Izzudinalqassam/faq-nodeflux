@@ -2,9 +2,10 @@ from flask import Flask
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
-from models import db, User, FAQ, Category
+from models import db, User, FAQ, Category, Attachment
 from routes.auth import auth_bp
 from routes.faq import faq_bp
+from routes.upload import upload_file, serve_file, delete_file
 from config import config
 import os
 
@@ -28,6 +29,11 @@ def create_app(config_name=None):
     # Register blueprints
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
     app.register_blueprint(faq_bp, url_prefix='/api')
+
+    # Upload routes
+    app.route('/api/upload', methods=['POST'])(upload_file)
+    app.route('/api/uploads/<filename>')(serve_file)
+    app.route('/api/upload/<int:file_id>', methods=['DELETE'])(delete_file)
 
     # Create database tables
     with app.app_context():

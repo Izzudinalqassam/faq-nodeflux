@@ -2,8 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Save, X, ArrowLeft } from 'lucide-react';
 import MDEditor from '@uiw/react-md-editor';
+import FileUpload from '../components/FileUpload';
 import { faqService, categoryService } from '../services/api';
-import type { FAQ, Category, FAQFormData } from '../types';
+import type { FAQ, Category, FAQFormData, FAQAttachment } from '../types';
+
+interface UploadedFile {
+  id: number;
+  filename: string;
+  original_filename: string;
+  file_type: string;
+  mime_type: string;
+  file_size: number;
+  url: string;
+}
 
 const FAQForm: React.FC = () => {
   const navigate = useNavigate();
@@ -22,6 +33,7 @@ const FAQForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [tagInput, setTagInput] = useState('');
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
 
   useEffect(() => {
     loadCategories();
@@ -62,10 +74,22 @@ const FAQForm: React.FC = () => {
     setSaving(true);
 
     try {
+      const submissionData = {
+        ...formData,
+        attachments: uploadedFiles.map(f => ({
+          id: f.id,
+          url: f.url,
+          filename: f.filename,
+          original_filename: f.original_filename,
+          file_type: f.file_type,
+          file_size: f.file_size
+        }))
+      };
+
       if (isEditing) {
-        await faqService.updateFAQ(parseInt(id!), formData);
+        await faqService.updateFAQ(parseInt(id!), submissionData);
       } else {
-        await faqService.createFAQ(formData);
+        await faqService.createFAQ(submissionData);
       }
       navigate('/admin/faqs');
     } catch (error) {
@@ -203,6 +227,22 @@ const FAQForm: React.FC = () => {
             </div>
             <p className="mt-1 text-sm text-gray-500">
               Gunakan Markdown untuk formatting. Contoh: **bold**, *italic*, `code`, lists, tables, dll.
+            </p>
+          </div>
+
+          {/* File Upload */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Attachments
+            </label>
+            <FileUpload
+              onFilesChange={setUploadedFiles}
+              accept="image/*,.pdf,.doc,.docx,.txt"
+              maxSize={10 * 1024 * 1024}
+              multiple={true}
+            />
+            <p className="mt-1 text-sm text-gray-500">
+              Upload images, documents, or other files. Images will be automatically optimized.
             </p>
           </div>
 
