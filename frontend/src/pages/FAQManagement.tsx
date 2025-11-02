@@ -10,8 +10,12 @@ import {
   ChevronDown,
   Tag,
 } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeHighlight from 'rehype-highlight';
 import { faqService, categoryService } from '../services/api';
 import type { FAQ, Category } from '../types';
+import 'highlight.js/styles/github.css';
 
 const FAQManagement: React.FC = () => {
   const [faqs, setFaqs] = useState<FAQ[]>([]);
@@ -227,23 +231,28 @@ const FAQManagement: React.FC = () => {
 
                       {expandedItems.has(faq.id) && (
                         <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-                          <div
-                            className="prose prose-sm max-w-none"
-                            dangerouslySetInnerHTML={{ __html: faq.answer }}
-                          />
+                          <div className="prose prose-sm max-w-none">
+                            <ReactMarkdown
+                              remarkPlugins={[remarkGfm]}
+                              rehypePlugins={[rehypeHighlight]}
+                            >
+                              {faq.answer}
+                            </ReactMarkdown>
+                          </div>
                         </div>
                       )}
                     </div>
 
                     <div className="flex items-center space-x-2 ml-4">
-                      <Link
-                        to={`/faqs/${faq.id}`}
+                      <a
+                        href={`/faqs/${faq.id}`}
                         target="_blank"
+                        rel="noopener noreferrer"
                         className="text-gray-400 hover:text-blue-600"
                         title="Lihat di FAQ publik"
                       >
                         <Eye className="h-4 w-4" />
-                      </Link>
+                      </a>
                       <Link
                         to={`/admin/faqs/${faq.id}/edit`}
                         className="text-gray-400 hover:text-blue-600"

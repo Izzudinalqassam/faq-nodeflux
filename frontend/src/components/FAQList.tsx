@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronDown, ChevronUp, Search, Tag } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeHighlight from 'rehype-highlight';
 import { faqService, categoryService } from '../services/api';
 import type { FAQ, Category } from '../types';
-import ReactMarkdown from 'react-markdown';
+import 'highlight.js/styles/github.css';
 
 const FAQList: React.FC = () => {
   const [faqs, setFaqs] = useState<FAQ[]>([]);
@@ -216,8 +219,13 @@ const FAQList: React.FC = () => {
 
                   {expandedItems.has(faq.id) && (
                     <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
-                      <div className="markdown-content">
-                        <ReactMarkdown>{faq.answer}</ReactMarkdown>
+                      <div className="prose prose-sm max-w-none">
+                        <ReactMarkdown
+                          remarkPlugins={[remarkGfm]}
+                          rehypePlugins={[rehypeHighlight]}
+                        >
+                          {faq.answer}
+                        </ReactMarkdown>
                       </div>
 
                       {faq.tags.length > 0 && (

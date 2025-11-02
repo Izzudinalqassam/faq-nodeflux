@@ -2,10 +2,12 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './hooks/useAuth';
 import FAQList from './components/FAQList';
+import FAQDetail from './pages/FAQDetail';
 import Login from './pages/Login';
 import AdminLayout from './components/AdminLayout';
 import AdminDashboard from './pages/AdminDashboard';
 import FAQManagement from './pages/FAQManagement';
+import FAQForm from './pages/FAQForm';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuth();
@@ -48,6 +50,7 @@ function App() {
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<FAQList />} />
+          <Route path="/faqs/:id" element={<FAQDetail />} />
 
           {/* Admin Routes */}
           <Route
@@ -67,6 +70,8 @@ function App() {
                   <Routes>
                     <Route path="/" element={<AdminDashboard />} />
                     <Route path="/faqs" element={<FAQManagement />} />
+                    <Route path="/faqs/new" element={<FAQForm />} />
+                    <Route path="/faqs/:id/edit" element={<FAQForm />} />
                     <Route path="/categories" element={<div className="p-8"><h1 className="text-2xl font-bold">Categories Management</h1><p className="text-gray-600 mt-2">Coming soon...</p></div>} />
                     <Route path="/stats" element={<div className="p-8"><h1 className="text-2xl font-bold">Statistics</h1><p className="text-gray-600 mt-2">Coming soon...</p></div>} />
                     <Route path="/settings" element={<div className="p-8"><h1 className="text-2xl font-bold">Settings</h1><p className="text-gray-600 mt-2">Coming soon...</p></div>} />

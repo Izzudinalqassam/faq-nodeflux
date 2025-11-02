@@ -90,28 +90,75 @@ def create_app(config_name=None):
         sample_faqs = [
             {
                 'question': 'Bagaimana cara instalasi VisionAIre Stream?',
-                'answer': '<p>Untuk instalasi VisionAIre Stream, ikuti langkah berikut:</p><div class="code-block"># Download package<br>wget https://releases.nodeflux.io/visionaire-stream/latest.tar.gz<br><br># Extract<br>tar -xzf latest.tar.gz<br>cd visionaire-stream<br><br># Setup configuration<br>cp config.example.yaml config.yaml<br><br># Run dengan Docker Compose<br>docker-compose up -d</div><p>Access http://localhost:8080 untuk verifikasi.</p>',
+                'answer': '''Untuk instalasi VisionAIre Stream, ikuti langkah berikut:
+
+```bash
+# Download package
+wget https://releases.nodeflux.io/visionaire-stream/latest.tar.gz
+
+# Extract
+tar -xzf latest.tar.gz
+cd visionaire-stream
+
+# Setup configuration
+cp config.example.yaml config.yaml
+
+# Run dengan Docker Compose
+docker-compose up -d
+```
+
+Access http://localhost:8080 untuk verifikasi.''',
                 'category': 'installation',
                 'tags': 'installation,visionaire stream,docker,setup',
                 'order': 1
             },
             {
                 'question': 'Kenapa API connection timeout/failed?',
-                'answer': '<p><strong>Common causes:</strong></p><ul><li>Check firewall settings (port 8080, 443)</li><li>Verify internet connectivity</li><li>Ping ke API endpoint</li><li>Check API key validity</li></ul><div class="code-block"># Test connection<br>curl -I https://api.nodeflux.io/v1/health</div>',
+                'answer': '''**Common causes:**
+
+- Check firewall settings (port 8080, 443)
+- Verify internet connectivity
+- Ping ke API endpoint
+- Check API key validity
+
+```bash
+# Test connection
+curl -I https://api.nodeflux.io/v1/health
+```''',
                 'category': 'connection',
                 'tags': 'api,connection,timeout,troubleshooting',
                 'order': 1
             },
             {
                 'question': 'Bagaimana optimasi performa VisionAIre?',
-                'answer': '<p><strong>Performance Optimization:</strong></p><ul><li>Use SSD untuk storage</li><li>Enable GPU acceleration</li><li>Allocate sufficient RAM</li><li>Use multi-core CPU</li></ul><div class="code-block"># GPU Configuration<br>gpu:<br>  enabled: true<br>  device_id: 0<br>  memory_fraction: 0.8</div>',
+                'answer': '''**Performance Optimization:**
+
+- Use SSD untuk storage
+- Enable GPU acceleration
+- Allocate sufficient RAM
+- Use multi-core CPU
+
+```yaml
+# GPU Configuration
+gpu:
+  enabled: true
+  device_id: 0
+  memory_fraction: 0.8
+```''',
                 'category': 'performance',
                 'tags': 'performance,optimization,gpu,memory',
                 'order': 1
             },
             {
                 'question': 'Face recognition accuracy rendah?',
-                'answer': '<p><strong>Improve Face Recognition:</strong></p><ul><li>Minimum face size: 100x100 pixels</li><li>Good lighting (no shadows)</li><li>Face angle: -30° to +30°</li><li>No occlusion (masks, glasses)</li></ul><p>Use quality reference images dan regular model retraining.</p>',
+                'answer': '''**Improve Face Recognition:**
+
+- Minimum face size: 100x100 pixels
+- Good lighting (no shadows)
+- Face angle: -30° to +30°
+- No occlusion (masks, glasses)
+
+Use quality reference images dan regular model retraining.''',
                 'category': 'detection',
                 'tags': 'face recognition,accuracy,ai,detection',
                 'order': 1
