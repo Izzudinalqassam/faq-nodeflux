@@ -1,11 +1,15 @@
 from flask import Flask
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
+from dotenv import load_dotenv
 from models import db, User, FAQ, Category
 from routes.auth import auth_bp
 from routes.faq import faq_bp
 from config import config
 import os
+
+# Load environment variables
+load_dotenv()
 
 def create_app(config_name=None):
     app = Flask(__name__)
@@ -30,11 +34,20 @@ def create_app(config_name=None):
         db.create_all()
 
         # Create default admin user if not exists
-        if not User.query.filter_by(username='admin').first():
-            admin = User(username='admin', is_admin=True)
-            admin.set_password('admin123')
-            db.session.add(admin)
-            db.session.commit()
+        if app.config.get('ADMIN_USERNAME') and app.config.get('ADMIN_PASSWORD'):
+            if not User.query.filter_by(username=app.config['ADMIN_USERNAME']).first():
+                admin = User(
+                    username=app.config['ADMIN_USERNAME'],
+                    is_admin=True,
+                    email=app.config.get('ADMIN_EMAIL')
+                )
+                admin.set_password(app.config['ADMIN_PASSWORD'])
+                db.session.add(admin)
+                print(f"Created admin user: {app.config['ADMIN_USERNAME']}")
+            else:
+                print(f"Admin user already exists: {app.config['ADMIN_USERNAME']}")
+        else:
+            print("Admin credentials not configured. Set ADMIN_USERNAME and ADMIN_PASSWORD in .env file")
 
         # Create default categories if not exists
         default_categories = [
