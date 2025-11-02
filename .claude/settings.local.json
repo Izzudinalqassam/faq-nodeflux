@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:docs.nodeflux.io)",
+      "Bash(python:*)",
+      "Bash(npm install axios react-router-dom @types/react-router-dom react-markdown tailwindcss @headlessui/react @heroicons/react lucide-react)",
+      "Bash(npx:*)",
+      "Bash(venvScriptsactivate)",
+      "Bash(pip install:*)",
+      "Bash(venv\\Scripts\\activate.bat:*)",
+      "Bash(npm start)",
+      "Bash(npm start:*)",
+      "Bash(npm install:*)",
+      "Bash(npm create vite:*)",
+      "Bash(npm run dev:*)",
+      "Bash(cat:*)",
+      "Bash(node:*)",
+      "Bash(npm cache clean:*)",
+      "Bash(taskkill:*)",
+      "Bash(cmd //c \"taskkill /F /IM node.exe /T\")",
+      "Bash(npm run build:*)",
+      "Bash(timeout:*)",
+      "Bash(curl:*)",
+      "Bash(git init:*)",
+      "Bash(git remote add:*)",
+      "Bash(git add:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
