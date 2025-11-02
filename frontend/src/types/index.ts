@@ -9,6 +9,7 @@ export type FAQ = {
   order: number;
   created_at: string;
   updated_at: string;
+  attachments: FAQAttachment[];
 };
 
 // Category Types
@@ -75,4 +76,38 @@ export type FAQAttachment = {
   original_filename: string;
   file_type: string;
   file_size: number;
+};
+
+// Rating & Feedback Types
+export type FAQRating = {
+  id: number;
+  faq_id: number;
+  rating: number; // 1-5
+  user_id?: number;
+  ip_address: string;
+  created_at: string;
+};
+
+export type FAQFeedback = {
+  id: number;
+  faq_id: number;
+  rating_id?: number;
+  feedback_text: string;
+  contact_email?: string;
+  user_id?: number;
+  ip_address: string;
+  is_helpful: boolean;
+  created_at: string;
+};
+
+export type RatingStats = {
+  average_rating: number;
+  total_ratings: number;
+  rating_distribution: {
+    1: number;
+    2: number;
+    3: number;
+    4: number;
+    5: number;
+  };
 };

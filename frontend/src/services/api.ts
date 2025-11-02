@@ -122,6 +122,34 @@ export const statsService = {
   },
 };
 
+// Feedback services
+export const feedbackService = {
+  submitRating: async (faqId: number, rating: number) => {
+    const response = await api.post(`/faqs/${faqId}/rating`, { rating });
+    return response.data;
+  },
+
+  submitFeedback: async (faqId: number, feedbackData: {
+    feedback_text: string;
+    contact_email?: string;
+    rating_id?: number;
+    is_helpful?: boolean;
+  }) => {
+    const response = await api.post(`/faqs/${faqId}/feedback`, feedbackData);
+    return response.data;
+  },
+
+  getFAQRatings: async (faqId: number) => {
+    const response = await api.get(`/faqs/${faqId}/ratings`);
+    return response.data;
+  },
+
+  getFAQFeedbacks: async (faqId: number, params?: { page?: number; per_page?: number }) => {
+    const response = await api.get(`/faqs/${faqId}/feedbacks`, { params });
+    return response.data;
+  },
+};
+
 // Health check
 export const healthCheck = async (): Promise<{ status: string; message: string }> => {
   const response = await api.get('/health');

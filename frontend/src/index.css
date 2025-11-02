@@ -113,3 +113,12 @@ body {
   font-size: 0.875rem;
   line-height: 1.5;
 }
+
+/* Search highlight styles */
+mark {
+  background-color: #fef08a;
+  color: #713f12;
+  padding: 0.1em 0.2em;
+  border-radius: 0.2em;
+  font-weight: 500;
+}

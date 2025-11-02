@@ -62,6 +62,11 @@ const FAQForm: React.FC = () => {
         tags: faq.tags,
         order: faq.order,
       });
+
+      // Load existing attachments
+      if (faq.attachments && faq.attachments.length > 0) {
+        setUploadedFiles(faq.attachments);
+      }
     } catch (error) {
       console.error('Error loading FAQ:', error);
     } finally {

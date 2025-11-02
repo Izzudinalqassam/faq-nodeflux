@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronDown, ChevronUp, Search, Tag } from 'lucide-react';
+import { ChevronDown, ChevronUp, Search, Tag, BookOpen } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import { faqService, categoryService } from '../services/api';
 import type { FAQ, Category } from '../types';
+import HighlightedText from '../components/HighlightedText';
+import { getSearchSnippet, stripHtml } from '../utils/searchUtils';
 import 'highlight.js/styles/github.css';
 
 const FAQList: React.FC = () => {
@@ -120,7 +122,26 @@ const FAQList: React.FC = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
+            {searchTerm && (
+              <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                  {faqs.length} hasil
+                </span>
+              </div>
+            )}
           </div>
+
+          {/* Search Results Summary */}
+          {searchTerm && (
+            <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+              <p className="text-sm text-blue-800">
+                Menampilkan {faqs.length} hasil untuk pencarian "<strong>{searchTerm}</strong>"
+                {faqs.length === 0 && (
+                  <span className="block mt-1">Coba kata kunci lain atau pilih kategori yang berbeda</span>
+                )}
+              </p>
+            </div>
+          )}
         </div>
       </section>
 
@@ -165,7 +186,7 @@ const FAQList: React.FC = () => {
       <section className="py-12">
         <div className="max-w-4xl mx-auto px-4">
           <h2 className="text-2xl font-bold text-gray-900 mb-8">
-            Pertanyaan Umum ({faqs.length})
+            {searchTerm ? `Hasil Pencarian (${faqs.length})` : `Pertanyaan Umum (${faqs.length})`}
           </h2>
 
           {faqs.length === 0 ? (
@@ -174,31 +195,50 @@ const FAQList: React.FC = () => {
                 <i className="fas fa-search"></i>
               </div>
               <h3 className="text-xl font-semibold text-gray-600 mb-2">
-                Tidak ada hasil ditemukan
+                {searchTerm ? 'Tidak ada hasil ditemukan' : 'Belum ada FAQ'}
               </h3>
               <p className="text-gray-500">
-                Coba kata kunci lain atau pilih kategori yang berbeda
+                {searchTerm
+                  ? 'Coba kata kunci lain atau pilih kategori yang berbeda'
+                  : 'FAQ akan segera tersedia'
+                }
               </p>
             </div>
           ) : (
             <div className="space-y-4">
               {faqs.map((faq) => (
                 <div key={faq.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                  {/* FAQ Header with Highlighted Question */}
                   <button
                     onClick={() => toggleExpanded(faq.id)}
                     className="w-full px-6 py-4 text-left hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset"
                   >
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
+                      <div className="flex items-center space-x-3 flex-1 min-w-0">
                         <i
-                          className={`${getCategoryIcon(faq.category)} text-lg`}
+                          className={`${getCategoryIcon(faq.category)} text-lg flex-shrink-0`}
                           style={{ color: getCategoryColor(faq.category) }}
                         ></i>
-                        <span className="font-semibold text-gray-900">
-                          {faq.question}
-                        </span>
+                        <div className="flex-1 min-w-0 text-left">
+                          <HighlightedText
+                            text={faq.question}
+                            searchTerm={searchTerm}
+                            className="font-semibold text-gray-900"
+                          />
+
+                          {/* Search Snippet */}
+                          {searchTerm && !expandedItems.has(faq.id) && (
+                            <p className="text-sm text-gray-600 mt-1">
+                              <HighlightedText
+                                text={getSearchSnippet(stripHtml(faq.answer), searchTerm, 120)}
+                                searchTerm={searchTerm}
+                                className="text-gray-600"
+                              />
+                            </p>
+                          )}
+                        </div>
                       </div>
-                      <div className="flex items-center space-x-2">
+                      <div className="flex items-center space-x-2 flex-shrink-0">
                         {faq.tags.length > 0 && (
                           <div className="flex items-center space-x-1 mr-2">
                             <Tag className="h-4 w-4 text-gray-400" />
@@ -217,6 +257,7 @@ const FAQList: React.FC = () => {
                     </div>
                   </button>
 
+                  {/* Expanded Content */}
                   {expandedItems.has(faq.id) && (
                     <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
                       <div className="prose prose-sm max-w-none">
@@ -227,6 +268,14 @@ const FAQList: React.FC = () => {
                           {faq.answer}
                         </ReactMarkdown>
                       </div>
+
+                      {/* Attachments Indicator */}
+                      {faq.attachments && faq.attachments.length > 0 && (
+                        <div className="mt-4 flex items-center text-sm text-gray-600">
+                          <BookOpen className="h-4 w-4 mr-2" />
+                          <span>{faq.attachments.length} attachment{faq.attachments.length > 1 ? 's' : ''}</span>
+                        </div>
+                      )}
 
                       {faq.tags.length > 0 && (
                         <div className="mt-4 flex flex-wrap gap-2">
