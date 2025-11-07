@@ -112,6 +112,10 @@ export const categoryService = {
     const response = await api.put(`/categories/${id}`, data);
     return response.data;
   },
+
+  deleteCategory: async (id: number): Promise<void> => {
+    await api.delete(`/categories/${id}`);
+  },
 };
 
 // Stats service

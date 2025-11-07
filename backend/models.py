@@ -27,6 +27,7 @@ class FAQ(db.Model):
     tags = db.Column(db.String(200))
     is_active = db.Column(db.Boolean, default=True)
     order = db.Column(db.Integer, default=0)
+    # view_count = db.Column(db.Integer, default=0)  # Temporarily disabled
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     created_by = db.Column(db.Integer, db.ForeignKey('user.id'))

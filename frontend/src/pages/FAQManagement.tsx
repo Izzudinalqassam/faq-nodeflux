@@ -12,10 +12,9 @@ import {
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import rehypeHighlight from 'rehype-highlight';
 import { faqService, categoryService } from '../services/api';
 import type { FAQ, Category } from '../types';
-import 'highlight.js/styles/github.css';
+import CodeBlock from '../components/CodeBlock';
 
 const FAQManagement: React.FC = () => {
   const [faqs, setFaqs] = useState<FAQ[]>([]);
@@ -234,7 +233,22 @@ const FAQManagement: React.FC = () => {
                           <div className="prose prose-sm max-w-none">
                             <ReactMarkdown
                               remarkPlugins={[remarkGfm]}
-                              rehypePlugins={[rehypeHighlight]}
+                              components={{
+                                code({ node, inline, className, children, ...props }) {
+                                  const match = /language-(\w+)/.exec(className || '');
+                                  const language = match ? match[1] : '';
+
+                                  return !inline && language ? (
+                                    <CodeBlock className={className} language={language}>
+                                      {children}
+                                    </CodeBlock>
+                                  ) : (
+                                    <code className={className} {...props}>
+                                      {children}
+                                    </code>
+                                  );
+                                },
+                              }}
                             >
                               {faq.answer}
                             </ReactMarkdown>

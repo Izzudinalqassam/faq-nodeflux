@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from models import FAQ, Category, User, db
+from models import FAQ, Category, User, FAQRating, FAQFeedback, Attachment, db
 from datetime import datetime
 
 faq_bp = Blueprint('faq', __name__)
@@ -11,6 +11,14 @@ def get_faqs():
         # Get query parameters
         category = request.args.get('category')
         search = request.args.get('search', '').lower()
+        tags = request.args.get('tags', '').split(',') if request.args.get('tags') else []
+        date_from = request.args.get('date_from')
+        date_to = request.args.get('date_to')
+        created_by = request.args.get('created_by')
+        has_attachments = request.args.get('has_attachments', type=bool)
+        min_rating = request.args.get('min_rating', type=int)
+        sort_by = request.args.get('sort_by', 'order')
+        sort_order = request.args.get('sort_order', 'asc')
         page = request.args.get('page', 1, type=int)
         per_page = request.args.get('per_page', 20, type=int)
 
@@ -18,7 +26,7 @@ def get_faqs():
         query = FAQ.query.filter_by(is_active=True)
 
         # Apply filters
-        if category:
+        if category and category != 'all':
             query = query.filter_by(category=category)
 
         if search:
@@ -30,8 +38,68 @@ def get_faqs():
                 )
             )
 
-        # Order by order field, then by created_at
-        query = query.order_by(FAQ.order.asc(), FAQ.created_at.desc())
+        if tags:
+            for tag in tags:
+                if tag.strip():
+                    query = query.filter(FAQ.tags.ilike(f'%{tag.strip()}%'))
+
+        if date_from:
+            try:
+                date_from_obj = datetime.strptime(date_from, '%Y-%m-%d')
+                query = query.filter(FAQ.created_at >= date_from_obj)
+            except ValueError:
+                pass
+
+        if date_to:
+            try:
+                date_to_obj = datetime.strptime(date_to, '%Y-%m-%d')
+                # Add one day to make it inclusive
+                date_to_obj = date_to_obj.replace(hour=23, minute=59, second=59)
+                query = query.filter(FAQ.created_at <= date_to_obj)
+            except ValueError:
+                pass
+
+        if created_by:
+            # Search by username or email
+            user_query = User.query.filter(
+                db.or_(
+                    User.username.ilike(f'%{created_by}%'),
+                    User.email.ilike(f'%{created_by}%')
+                )
+            ).first()
+            if user_query:
+                query = query.filter_by(created_by=user_query.id)
+
+        if has_attachments:
+            query = query.join(Attachment).filter(Attachment.id.isnot(None)).distinct()
+
+        if min_rating and min_rating > 0:
+            # Join with ratings and filter by average rating
+            query = query.outerjoin(FAQRating).group_by(FAQ.id).having(
+                db.func.avg(FAQRating.rating) >= min_rating
+            )
+
+        # Apply sorting
+        if sort_by == 'newest':
+            query = query.order_by(FAQ.created_at.desc())
+        elif sort_by == 'oldest':
+            query = query.order_by(FAQ.created_at.asc())
+        elif sort_by == 'rating':
+            query = query.outerjoin(FAQRating).group_by(FAQ.id).order_by(
+                db.func.avg(FAQRating.rating).desc() if sort_order == 'desc' else db.func.avg(FAQRating.rating).asc()
+            )
+        elif sort_by == 'views':
+            # TODO: View sorting temporarily disabled
+            query = query.order_by(FAQ.created_at.desc() if sort_order == 'desc' else FAQ.created_at.asc())
+        elif sort_by == 'relevance' and search:
+            # Simple relevance scoring based on search term positions
+            query = query.order_by(
+                FAQ.question.ilike(f'%{search}%').desc(),
+                FAQ.created_at.desc()
+            )
+        else:
+            # Default sorting by order
+            query = query.order_by(FAQ.order.asc() if sort_order == 'asc' else FAQ.order.desc())
 
         # Paginate
         pagination = query.paginate(
@@ -55,13 +123,14 @@ def get_faqs():
         })
 
     except Exception as e:
+        print(f"Error in get_faqs: {e}")
         return jsonify({'error': 'Failed to fetch FAQs'}), 500
 
 @faq_bp.route('/faqs', methods=['POST'])
 @jwt_required()
 def create_faq():
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         data = request.get_json()
 
         if not data or not data.get('question') or not data.get('answer') or not data.get('category'):
@@ -91,6 +160,10 @@ def get_faq(faq_id):
         faq = FAQ.query.get(faq_id)
         if not faq or not faq.is_active:
             return jsonify({'error': 'FAQ not found'}), 404
+
+        # TODO: Increment view count - temporarily disabled
+        # faq.view_count = (faq.view_count or 0) + 1
+        # db.session.commit()
 
         return jsonify(faq.to_dict())
 
@@ -199,7 +272,7 @@ def create_category():
 @jwt_required()
 def update_category(category_id):
     try:
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         category = Category.query.get(category_id)
 
         if not category:
@@ -230,26 +303,58 @@ def update_category(category_id):
         db.session.rollback()
         return jsonify({'error': 'Failed to update category'}), 500
 
+@faq_bp.route('/categories/<int:category_id>', methods=['DELETE'])
+@jwt_required()
+def delete_category(category_id):
+    try:
+        current_user_id = int(get_jwt_identity())
+        category = Category.query.get(category_id)
+
+        if not category:
+            return jsonify({'error': 'Category not found'}), 404
+
+        # Check if category has FAQs
+        faq_count = FAQ.query.filter_by(category=category.name, is_active=True).count()
+        if faq_count > 0:
+            return jsonify({
+                'error': f'Cannot delete category with {faq_count} active FAQs. Please reassign or delete the FAQs first.'
+            }), 400
+
+        # Soft delete
+        category.is_active = False
+        db.session.commit()
+        return jsonify({'message': 'Category deleted successfully'})
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': 'Failed to delete category'}), 500
+
 @faq_bp.route('/stats', methods=['GET'])
 def get_stats():
     try:
+        # Basic counts
         total_faqs = FAQ.query.filter_by(is_active=True).count()
         total_categories = Category.query.filter_by(is_active=True).count()
+        total_ratings = db.session.query(FAQRating).count()
+        total_feedbacks = db.session.query(FAQFeedback).count()
+        total_attachments = db.session.query(Attachment).count()
 
-        # FAQs per category
-        category_stats = db.session.query(
-            FAQ.category,
-            db.func.count(FAQ.id)
-        ).filter_by(is_active=True).group_by(FAQ.category).all()
-
+        # Simple stats - avoid complex queries for now
         return jsonify({
-            'total_faqs': total_faqs,
-            'total_categories': total_categories,
-            'category_breakdown': [
-                {'category': stat[0], 'count': stat[1]}
-                for stat in category_stats
-            ]
+            'overview': {
+                'total_faqs': total_faqs,
+                'total_categories': total_categories,
+                'total_ratings': total_ratings,
+                'total_feedbacks': total_feedbacks,
+                'total_attachments': total_attachments
+            },
+            'category_breakdown': [],
+            'monthly_stats': [],
+            'top_rated': [],
+            'most_viewed': [],
+            'recent_activity': []
         })
 
     except Exception as e:
+        print(f"Stats error: {e}")
         return jsonify({'error': 'Failed to fetch stats'}), 500

@@ -94,7 +94,9 @@ def create_app(config_name=None):
                 category = Category(**cat_data)
                 db.session.add(category)
 
-        # Create sample FAQs if not exists
+        # TODO: Sample FAQs creation temporarily disabled due to schema changes
+        # Will be re-enabled after database migration is complete
+        """
         sample_faqs = [
             {
                 'question': 'Bagaimana cara instalasi VisionAIre Stream?',
@@ -119,57 +121,6 @@ Access http://localhost:8080 untuk verifikasi.''',
                 'category': 'installation',
                 'tags': 'installation,visionaire stream,docker,setup',
                 'order': 1
-            },
-            {
-                'question': 'Kenapa API connection timeout/failed?',
-                'answer': '''**Common causes:**
-
-- Check firewall settings (port 8080, 443)
-- Verify internet connectivity
-- Ping ke API endpoint
-- Check API key validity
-
-```bash
-# Test connection
-curl -I https://api.nodeflux.io/v1/health
-```''',
-                'category': 'connection',
-                'tags': 'api,connection,timeout,troubleshooting',
-                'order': 1
-            },
-            {
-                'question': 'Bagaimana optimasi performa VisionAIre?',
-                'answer': '''**Performance Optimization:**
-
-- Use SSD untuk storage
-- Enable GPU acceleration
-- Allocate sufficient RAM
-- Use multi-core CPU
-
-```yaml
-# GPU Configuration
-gpu:
-  enabled: true
-  device_id: 0
-  memory_fraction: 0.8
-```''',
-                'category': 'performance',
-                'tags': 'performance,optimization,gpu,memory',
-                'order': 1
-            },
-            {
-                'question': 'Face recognition accuracy rendah?',
-                'answer': '''**Improve Face Recognition:**
-
-- Minimum face size: 100x100 pixels
-- Good lighting (no shadows)
-- Face angle: -30° to +30°
-- No occlusion (masks, glasses)
-
-Use quality reference images dan regular model retraining.''',
-                'category': 'detection',
-                'tags': 'face recognition,accuracy,ai,detection',
-                'order': 1
             }
         ]
 
@@ -180,6 +131,7 @@ Use quality reference images dan regular model retraining.''',
                 faq_data['created_by'] = admin_user.id if admin_user else 1
                 faq = FAQ(**faq_data)
                 db.session.add(faq)
+        """
 
         db.session.commit()
 

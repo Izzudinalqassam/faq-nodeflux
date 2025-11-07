@@ -51,12 +51,21 @@ export type PaginatedResponse<T> = {
 
 // Stats Types
 export type FAQStats = {
-  total_faqs: number;
-  total_categories: number;
+  overview: {
+    total_faqs: number;
+    total_categories: number;
+    total_ratings: number;
+    total_feedbacks: number;
+    total_attachments: number;
+  };
   category_breakdown: Array<{
     category: string;
     count: number;
   }>;
+  monthly_stats: any[];
+  top_rated: any[];
+  most_viewed: any[];
+  recent_activity: any[];
 };
 
 // Form Data Types

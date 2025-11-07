@@ -3,7 +3,6 @@ import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, ChevronDown, ChevronUp, Tag, FileText, Download, Paperclip, MessageSquare, X, Share2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import rehypeHighlight from 'rehype-highlight';
 import { faqService, categoryService, feedbackService } from '../services/api';
 import type { FAQ, Category, RatingStats } from '../types';
 import ImageGallery from '../components/ImageGallery';
@@ -11,7 +10,7 @@ import Rating from '../components/Rating';
 import FeedbackForm from '../components/FeedbackForm';
 import ShareModal from '../components/ShareModal';
 import PrintButton from '../components/PrintButton';
-import 'highlight.js/styles/github.css';
+import CodeBlock from '../components/CodeBlock';
 
 const FAQDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -229,7 +228,22 @@ const FAQDetail: React.FC = () => {
             <div className="prose prose-sm md:prose-lg max-w-none">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
-                rehypePlugins={[rehypeHighlight]}
+                components={{
+                  code({ node, inline, className, children, ...props }) {
+                    const match = /language-(\w+)/.exec(className || '');
+                    const language = match ? match[1] : '';
+
+                    return !inline && language ? (
+                      <CodeBlock className={className} language={language}>
+                        {children}
+                      </CodeBlock>
+                    ) : (
+                      <code className={className} {...props}>
+                        {children}
+                      </code>
+                    );
+                  },
+                }}
               >
                 {faq.answer}
               </ReactMarkdown>

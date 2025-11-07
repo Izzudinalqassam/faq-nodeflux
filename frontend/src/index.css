@@ -1,5 +1,4 @@
 @import "tailwindcss";
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @theme {
@@ -18,6 +17,128 @@
 
 body {
   font-family: 'Inter', sans-serif;
+}
+
+/* Dark mode styles */
+.dark {
+  color-scheme: dark;
+}
+
+.dark body {
+  background-color: rgb(17 24 39);
+  color: rgb(243 244 246);
+}
+
+.dark .bg-white {
+  background-color: rgb(31 41 55);
+}
+
+.dark .bg-gray-50 {
+  background-color: rgb(17 24 39);
+}
+
+.dark .bg-gray-100 {
+  background-color: rgb(31 41 55);
+}
+
+.dark .bg-gray-200 {
+  background-color: rgb(55 65 81);
+}
+
+.dark .bg-gray-900 {
+  background-color: rgb(17 24 39);
+}
+
+.dark .text-gray-900 {
+  color: rgb(243 244 246);
+}
+
+.dark .text-gray-800 {
+  color: rgb(229 231 235);
+}
+
+.dark .text-gray-700 {
+  color: rgb(209 213 219);
+}
+
+.dark .text-gray-600 {
+  color: rgb(156 163 175);
+}
+
+.dark .text-gray-500 {
+  color: rgb(156 163 175);
+}
+
+.dark .text-gray-400 {
+  color: rgb(107 114 128);
+}
+
+.dark .border-gray-200 {
+  border-color: rgb(55 65 81);
+}
+
+.dark .border-gray-100 {
+  border-color: rgb(55 65 81);
+}
+
+.dark .border-gray-300 {
+  border-color: rgb(75 85 99);
+}
+
+.dark .hover\:bg-gray-50:hover {
+  background-color: rgb(31 41 55);
+}
+
+.dark .hover\:bg-gray-100:hover {
+  background-color: rgb(55 65 81);
+}
+
+.dark .hover\:bg-gray-200:hover {
+  background-color: rgb(75 85 99);
+}
+
+.dark .hover\:text-gray-900:hover {
+  color: rgb(243 244 246);
+}
+
+.dark .hover\:text-gray-800:hover {
+  color: rgb(229 231 235);
+}
+
+/* Dark mode for cards */
+.dark .card {
+  @apply bg-gray-800 border-gray-700;
+}
+
+/* Dark mode for search highlights */
+.dark mark {
+  background-color: rgb(251 191 36);
+  color: rgb(17 24 39);
+}
+
+/* Dark mode for MDEditor */
+.dark .w-md-editor {
+  background-color: rgb(31 41 55);
+}
+
+.dark .w-md-editor-text {
+  background-color: rgb(31 41 55);
+  color: rgb(243 244 246);
+}
+
+.dark .w-md-editor-text pre {
+  background-color: rgb(17 24 39);
+}
+
+.dark .w-md-editor-text code {
+  background-color: rgb(55 65 81);
+  color: rgb(243 244 246);
+}
+
+/* Dark mode transitions */
+* {
+  transition-property: background-color, border-color, color;
+  transition-duration: 200ms;
 }
 
 @layer components {
@@ -122,9 +243,3 @@ mark {
   border-radius: 0.2em;
   font-weight: 500;
 }
-
-/* Import mobile-specific styles */
-@import './styles/mobile.css';
-
-/* Import print-specific styles */
-@import './styles/print.css';
