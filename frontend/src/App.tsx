@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './hooks/useAuth';
-import FAQList from './components/FAQList';
+import SimpleFAQList from './components/SimpleFAQList';
 import FAQDetail from './pages/FAQDetail';
 import Login from './pages/Login';
 import AdminLayout from './components/AdminLayout';
@@ -52,7 +52,7 @@ function App() {
       <Router>
         <Routes>
           {/* Public Routes */}
-          <Route path="/" element={<FAQList />} />
+          <Route path="/" element={<SimpleFAQList />} />
           <Route path="/faqs/:id" element={<FAQDetail />} />
 
           {/* Admin Routes */}
